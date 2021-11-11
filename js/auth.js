@@ -7,12 +7,12 @@ const auth = () => {
   const inputPassword = document.getElementById("password");
   const buttonOut = document.querySelector(".button-out");
   const userName = document.querySelector(".user-name");
-  const buttonCard = document.querySelector('.button-cart');
+  const buttonCard = document.querySelector(".button-cart");
   const login = (user) => {
     buttonAuth.style.display = "none";
     buttonOut.style.display = "flex";
     userName.style.display = "flex";
-    userName.textContent = user.login;
+    userName.textContent = user.login.trim();
     modalAuth.style.display = "none";
     buttonCard.style.display = "flex";
   };
@@ -40,11 +40,15 @@ const auth = () => {
       password: inputPassword.value,
     };
     login(user);
+    cheackUser();
     localStorage.setItem("user", JSON.stringify(user));
   });
 
   if (localStorage.getItem("user")) {
     login(JSON.parse(localStorage.getItem("user")));
   }
-}
-auth()
+  const cheackUser = () => {
+    console.log(inputLogin.value.trim());
+  };
+};
+auth();

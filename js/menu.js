@@ -1,8 +1,20 @@
 const menu = () => {
   const cardsMenu = document.querySelector(".cards-menu");
-  const cartArray = localStorage.getItem('cart') ?
-    JSON.parse(localStorage.getItem('cart')) :
-    []
+  const modalPricetag = document.querySelector(".modal-pricetag");
+
+  const calcCart = () => {
+    const cartArray = localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [];
+
+    let total = 0;
+    cartArray.forEach((elem) => {
+      let count = elem.count;
+      let price = elem.price;
+      total += price * count;
+    });
+    return total;
+  };
 
   const changeTitle = (restaurant) => {
     const restaurantTitle = document.querySelector(".restaurant-title");
@@ -16,18 +28,21 @@ const menu = () => {
   };
 
   const addToCart = (cartItem) => {
+    const cartArray = localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [];
     if (cartArray.some((item) => item.id === cartItem.id)) {
       cartArray.map((item) => {
         if (item.id === cartItem.id) {
-          item.count++
+          item.count++;
         }
-        return item
-      })
+        return item;
+      });
     } else {
-      cartArray.push(cartItem)
+      cartArray.push(cartItem);
     }
-    localStorage.setItem('cart', JSON.stringify(cartArray))
-  }
+    localStorage.setItem("cart", JSON.stringify(cartArray));
+  };
   const renderItems = (data) => {
     data.forEach(({ description, id, image, name, price }) => {
       const card = document.createElement("div");
@@ -51,9 +66,10 @@ const menu = () => {
               </div>
             </div>
     `;
-      card.querySelector('.button-card-text').addEventListener("click", () => {
-        addToCart({ name, price, id, count: 1 })
-      })
+      card.querySelector(".button-add-cart").addEventListener("click", () => {
+        addToCart({ name, price, id, count: 1 });
+        modalPricetag.innerHTML = `${calcCart()} ₽`;
+      });
       cardsMenu.append(card);
     });
   };
@@ -72,5 +88,5 @@ const menu = () => {
   } else {
     window.location.href = "/";
   }
-}
-menu()
+};
+menu();
